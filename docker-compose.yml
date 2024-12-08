@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  mytheresa:
+    build: 
+      context: .
+      target: mytheresa
+    ports:
+      - 8000:8000
+    depends_on: 
+      - mongodb
+    command: |
+      /bin/sh -c "sleep 10 && /mytheresa/mytheresa"
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017" 
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d/
+    environment:
+      MONGO_INITDB_DATABASE: mytheresadb
+  
