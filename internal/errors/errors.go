@@ -1,7 +1,9 @@
 package errors
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -19,7 +21,17 @@ func (e *HttpError) Error() string {
 }
 
 func (e *HttpError) Respond(w http.ResponseWriter) {
-	http.Error(w, e.Error(), e.Code)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(e.Code)
+
+	response := map[string]interface{}{
+		"code":  e.Code,
+		"error": e.Message,
+	}
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		log.Printf("Error encoding JSON response: %v", err)
+	}
 }
 
 func Wrap(err error, httpError HttpError) *HttpError {

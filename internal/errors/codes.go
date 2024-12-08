@@ -8,6 +8,6 @@ var (
 	ErrBadRequest          = &HttpError{http.StatusBadRequest, "bad request", nil}
 	ErrUnauthorized        = &HttpError{http.StatusUnauthorized, "unauthorized", nil}
 	ErrForbidden           = &HttpError{http.StatusForbidden, "forbidden", nil}
-	ErrIntConvert          = &HttpError{http.StatusInternalServerError, "unsupported int", nil}
+	ErrPriceLessConvert    = &HttpError{http.StatusBadRequest, "Invalid priceLessThan parameter: must be an integer", nil}
 	ErrMethodNotAllowed    = &HttpError{http.StatusMethodNotAllowed, "method not allowed", nil}
 )

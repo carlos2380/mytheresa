@@ -1,8 +1,12 @@
 package handlers
 
-import "net/http"
+import (
+	"mytheresa/internal/application"
+	"net/http"
+)
 
 type ProductHandler struct {
+	AppProduct application.ProductIntef
 }
 
 func setHeaders(w http.ResponseWriter) {
