@@ -7,7 +7,7 @@ import (
 )
 
 type MockDiscount struct {
-	Discounts map[string]models.DiscountCategory // Cambiado a un mapa
+	Discounts map[string]models.DiscountCategory
 }
 
 func (mDiscount *MockDiscount) LoadData() error {

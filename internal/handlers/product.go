@@ -21,7 +21,8 @@ func (pHandler ProductHandler) GetProducts(w http.ResponseWriter, r *http.Reques
 		if priceLessThan != "" {
 			priceLess, err := strconv.Atoi(priceLessThan)
 			if err != nil {
-				log.Println(errors.Wrap(err, *errors.ErrPriceLessConvert))
+				log.Println(errors.ErrPriceLessConvert)
+				errors.Unwrap(err)
 				errors.ErrPriceLessConvert.Respond(w)
 				return
 			}
@@ -31,6 +32,7 @@ func (pHandler ProductHandler) GetProducts(w http.ResponseWriter, r *http.Reques
 		productPrice, nextCursor, err := pHandler.AppProduct.GetProducts(category, priceLessThanInt, cursor)
 		if err != nil {
 			log.Printf("Error encoding JSON response: %v", err)
+			errors.Unwrap(err)
 			errors.ErrInternalServerError.Respond(w)
 			return
 		}

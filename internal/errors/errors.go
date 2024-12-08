@@ -2,6 +2,7 @@ package errors
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -34,7 +35,11 @@ func (e *HttpError) Respond(w http.ResponseWriter) {
 	}
 }
 
-func Wrap(err error, httpError HttpError) *HttpError {
-	httpError.Err = err
-	return &httpError
+func Unwrap(err error) {
+	log.Println("Error occurred:")
+	unwrappedErr := err
+	for unwrappedErr != nil {
+		log.Printf(" - %v", unwrappedErr)
+		unwrappedErr = errors.Unwrap(unwrappedErr)
+	}
 }

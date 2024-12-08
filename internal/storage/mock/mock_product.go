@@ -12,6 +12,7 @@ import (
 type MockProduct struct {
 	Products   []*models.Product
 	ProductMap map[string][]*models.Product
+	PageSize   int
 }
 
 func (mProduct *MockProduct) LoadData() error {
@@ -30,9 +31,7 @@ func (mProduct *MockProduct) LoadData() error {
 		mProduct.ProductMap[mProduct.Products[i].Category] = append(mProduct.ProductMap[mProduct.Products[i].Category], mProduct.Products[i])
 	}
 
-	// for _, product := range mProduct.Products {
-	// 	fmt.Println(product)
-	// }
+	mProduct.PageSize = 5
 	return nil
 }
 
@@ -50,7 +49,7 @@ func (mProduct *MockProduct) GetProducts(category string, priceLessThan *int, cu
 		var err error
 		startIndex, err = strconv.Atoi(cursor)
 		if err != nil || startIndex < 0 || startIndex >= len(productsReturn) {
-			return nil, "", fmt.Errorf("cursor inválido")
+			return nil, "", fmt.Errorf("invalid cursor: %w", err)
 		}
 	}
 
@@ -63,12 +62,12 @@ func (mProduct *MockProduct) GetProducts(category string, priceLessThan *int, cu
 			filteredProducts = append(filteredProducts, *product)
 		}
 
-		if len(filteredProducts) == 5 {
+		if len(filteredProducts) == mProduct.PageSize {
 			break
 		}
 	}
 	var nextCursor = ""
-	if len(filteredProducts) == 5 && len(productsReturn) > startIndex+len(filteredProducts) {
+	if len(filteredProducts) == mProduct.PageSize && len(productsReturn) > startIndex+len(filteredProducts) {
 		nextCursor = strconv.Itoa(startIndex + len(filteredProducts))
 	}
 

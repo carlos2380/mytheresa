@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"log"
+	"strconv"
 
 	product_application "mytheresa/internal/application/product"
 	"mytheresa/internal/handlers"
@@ -22,10 +23,17 @@ func main() {
 	portMongodb := flag.String("port_mongodb", "27017", "Port on which the MongoDB server will be serving connections.")
 	ipMongodb := flag.String("ip_mongodb", "mongodb", "IP address on which the MongoDB server will be listening.")
 	databaseName := flag.String("database_name", "mytheresadb", "Name of the database connection.")
+	pageSizeStr := flag.String("page_size_product", "5", "Number the products per page response.")
 	flag.Parse()
+
+	pageSize, err := strconv.Atoi(*pageSizeStr)
+	if err != nil || pageSize <= 0 {
+		log.Fatalf("Invalid page_size_product: %v", err)
+	}
 
 	mongoCtx, mongoCancel := context.WithCancel(context.Background())
 	defer mongoCancel()
+
 	client, database, err := mongodb.InitMongo(*ipMongodb, *portMongodb, *databaseName)
 	if err != nil {
 		log.Fatal("Error mongodb:", err)
@@ -45,6 +53,7 @@ func main() {
 	mongoProduct := &mongodb.Product{
 		CollectionMDB: database.Collection("Product"),
 		Ctx:           mongoCtx,
+		PageSize:      pageSize,
 	}
 
 	appProduct := &product_application.ProductApplication{
