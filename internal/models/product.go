@@ -8,3 +8,10 @@ type Product struct {
 	Price       int    `json:"price"`
 	SkuDiscount *int   `json:"sku_discount,omitempty"`
 }
+
+type ProductPrice struct {
+	SKU      string `json:"sku"`
+	Name     string `json:"name"`
+	Category string `json:"category"`
+	Price    Price  `json:"price"`
+}
