@@ -1,0 +1,133 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Mytheresa API",
+      "description": "API for retrieving product information with optional filters.",
+      "version": "1.0.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/api",
+    "schemes": ["http"],
+    "paths": {
+      "/products": {
+        "get": {
+          "summary": "Get products",
+          "description": "Retrieve a list of products with optional filters such as category, price, and pagination.",
+          "tags": ["Products"],
+          "parameters": [
+            {
+              "name": "category",
+              "in": "query",
+              "description": "Filter by product category",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "priceLessThan",
+              "in": "query",
+              "description": "Filter products with prices less than the given value",
+              "required": false,
+              "type": "integer"
+            },
+            {
+              "name": "cursor",
+              "in": "query",
+              "description": "Pagination cursor for fetching the next set of products",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response with product list",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nextCursor": {
+                    "type": "string",
+                    "description": "Cursor for the next set of products"
+                  },
+                  "products": {
+                    "type": "array",
+                    "description": "List of products",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "sku": {
+                          "type": "string",
+                          "description": "Unique identifier for the product"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Name of the product"
+                        },
+                        "category": {
+                          "type": "string",
+                          "description": "Category of the product"
+                        },
+                        "price": {
+                          "type": "object",
+                          "properties": {
+                            "original": {
+                              "type": "integer",
+                              "description": "Original price of the product in cents"
+                            },
+                            "value": {
+                              "type": "integer",
+                              "description": "Discounted price of the product in cents"
+                            },
+                            "discount_percentage": {
+                              "type": "string",
+                              "description": "Discount applied to the product, if any"
+                            },
+                            "currency": {
+                              "type": "string",
+                              "description": "Currency of the price"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request parameters",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "description": "HTTP status code"
+                  },
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "integer",
+                    "description": "HTTP status code"
+                  },
+                  "error": {
+                    "type": "string",
+                    "description": "Error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {}
+  }
+  

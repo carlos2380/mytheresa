@@ -8,7 +8,9 @@ RUN go build -o /mytheresa cmd/server/main.go
 
 FROM alpine:latest as mytheresa
 WORKDIR /mytheresa
+COPY --from=builder /app/docs /mytheresa/docs
 COPY --from=builder /mytheresa .
+RUN chmod -R 755 /mytheresa/docs
 RUN chmod +x /mytheresa/mytheresa
 ENV PORT=8000
 EXPOSE 8000

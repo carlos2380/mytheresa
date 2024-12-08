@@ -69,7 +69,7 @@ func (productMdb *Product) GetProducts(category string, priceLessThan *int, curs
 	// Generar el nuevo cursor basado en el último _id
 	var nextCursor string
 	if len(products) == 6 { // Si se obtienen 5 resultados, hay más páginas
-		nextCursor = products[5].Id.Hex() // El 6º producto determina el próximo cursor
+		nextCursor = products[4].Id.Hex() // El 6º producto determina el próximo cursor
 		products = products[:5]
 	}
 
