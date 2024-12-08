@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 
+	product_application "mytheresa/internal/application/product"
 	"mytheresa/internal/handlers"
 	"mytheresa/internal/server"
 	"mytheresa/internal/storage/mongodb"
@@ -23,9 +24,9 @@ func main() {
 	databaseName := flag.String("database_name", "mytheresadb", "Name of the database connection.")
 	flag.Parse()
 
-	_, mongoCancel := context.WithCancel(context.Background())
+	mongoCtx, mongoCancel := context.WithCancel(context.Background())
 	defer mongoCancel()
-	client, _, err := mongodb.InitMongo(*ipMongodb, *portMongodb, *databaseName)
+	client, database, err := mongodb.InitMongo(*ipMongodb, *portMongodb, *databaseName)
 	if err != nil {
 		log.Fatal("Error mongodb:", err)
 	}
@@ -36,7 +37,24 @@ func main() {
 		}
 	}()
 
-	hProduct := &handlers.ProductHandler{}
+	mongoDiscount := &mongodb.Discount{
+		CollectionMDB: database.Collection("DiscountCategory"),
+		Ctx:           mongoCtx,
+	}
+
+	mongoProduct := &mongodb.Product{
+		CollectionMDB: database.Collection("Product"),
+		Ctx:           mongoCtx,
+	}
+
+	appProduct := &product_application.ProductApplication{
+		StgProduct:  mongoProduct,
+		StgDiscount: mongoDiscount,
+	}
+
+	hProduct := &handlers.ProductHandler{
+		AppProduct: appProduct,
+	}
 	router := server.NewRouter(hProduct)
 	srv := &http.Server{
 		Addr:    ":" + *port,
