@@ -89,12 +89,12 @@ ab -k -c 1 -n 100000 http://localhost:8000/api/products
 ![client_test](https://github.com/carlos2380/webCarlos2380/blob/master/mytheresa/ab1.png)
 ![client_test](https://github.com/carlos2380/webCarlos2380/blob/master/mytheresa/cpu1.png)
 
-With a concurrency level of 1, the server achieved 951.91 transactions per second (TPS), utilizing approximately 3.5% CPU with an average request time of 1.051 ms.
+With a concurrency level of 1, the server achieved 951.91 transactions per second (TPS), utilizing approximately AB 3.5% CPU and Docker 7% CPU with an average request time of 1.051 ms.
 
 ![client_test](https://github.com/carlos2380/webCarlos2380/blob/master/mytheresa/ab4.png)
 ![client_test](https://github.com/carlos2380/webCarlos2380/blob/master/mytheresa/cpu4.png)
 
-With a concurrency level of 4, the server achieved 2856.62 transactions per second (TPS), utilizing approximately 8% CPU with an average request time of 0.35 ms.
+With a concurrency level of 4, the server achieved 2856.62 transactions per second (TPS), utilizing approximately 8% CPU and Docker 27,1% CPU  with an average request time of 0.35 ms.
 
 ### Conclusion
 
