@@ -12,7 +12,7 @@ const batchSize = 10000;
 for (let i = 0; i < products.length; i += batchSize) {
     const batch = products.slice(i, i + batchSize);
     db.Product.insertMany(batch);
-    print(`Insertado lote ${Math.ceil(i / batchSize) + 1} de ${Math.ceil(products.length / batchSize)}`);
+    print(`Insert batch ${Math.ceil(i / batchSize) + 1} of ${Math.ceil(products.length / batchSize)}`);
 }
 
 db.Product.updateOne(
